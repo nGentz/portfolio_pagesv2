@@ -1,0 +1,392 @@
+@import 'tailwindcss';
+@import 'highlight.js/styles/atom-one-light.css';
+
+::selection {
+  background-color: #47a3f3;
+  color: #fefefe;
+}
+
+:root {
+  --color-background: #FFF; /* Main site background color */
+  --color-surface: #FFF;
+  --color-primary: #007AFF;
+  --color-text: #000000;
+  --color-subtext: #555555;
+  --color-divider: #CCCCCC;
+
+  --font-family: system-ui, sans-serif;
+  --font-size-h1: 2rem;
+  --font-size-h2: 1.5rem;
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --line-height-heading: 1.2;
+  --line-height-body: 1.5;
+
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 3rem;
+
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  --sh-class: #2d5e9d;
+  --sh-identifier: #354150;
+  --sh-sign: #8996a3;
+  --sh-string: #007f7a;
+  --sh-keyword: #e02518;
+  --sh-comment: #a19595;
+  --sh-jsxliterals: #6266d1;
+  --sh-property: #e25a1c;
+  --sh-entity: #e25a1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sh-class: #4c97f8;
+    --sh-identifier: white;
+    --sh-keyword: #f47067;
+    --sh-string: #0fa295;
+  }
+  html {
+    color-scheme: dark;
+  }
+}
+
+@font-face {
+  font-family: 'Sweden Sans';
+  src: url('/fonts/SwedenSansBook.woff2') format('woff2'),
+       url('/fonts/SwedenSansBook.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Sweden Sans';
+  src: url('/fonts/SwedenSansRegular.woff2') format('woff2'),
+       url('/fonts/SwedenSansRegular.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Sweden Sans';
+  src: url('/fonts/SwedenSansSemiBold.woff2') format('woff2'),
+       url('/fonts/SwedenSansSemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Sweden Sans';
+  src: url('/fonts/SwedenSansBold.woff2') format('woff2'),
+       url('/fonts/SwedenSansBold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+html, body {
+  background: #FFF; /* Explicitly set main background color */
+  color: var(--color-text);
+  font-family: 'Sweden Sans', system-ui, sans-serif;
+  min-width: 360px;
+}
+
+/* Shared page container spacing (desktop vs mobile) */
+.page-container { padding-top: 12rem; }
+@media (max-width: 900px) {
+  .page-container { padding-top: 8rem; }
+}
+
+.prose .anchor {
+  @apply absolute invisible no-underline;
+
+  margin-left: -1em;
+  padding-right: 0.5em;
+  width: 80%;
+  max-width: 700px;
+  cursor: pointer;
+}
+
+.anchor:hover {
+  @apply visible;
+}
+
+.prose a {
+  @apply underline transition-all underline-offset-2 decoration-[0.1em];
+  /* Match underline color to link text color */
+  text-decoration-color: currentColor;
+}
+
+.prose .anchor:after {
+  @apply text-neutral-300 dark:text-neutral-700;
+  content: '#';
+}
+
+.prose *:hover > .anchor {
+  @apply visible;
+}
+
+
+.prose img {
+  /* Don't apply styles to next/image */
+  @apply m-0;
+}
+
+.prose p {
+  @apply my-4 text-black;
+}
+
+.prose h1 {
+  /* Slightly smaller than before, still above h2 */
+  @apply text-3xl md:text-4xl font-medium tracking-tight mt-6 mb-2;
+}
+
+/* Home page: remove extra top margin on the first H1 only */
+.home-prose h1:first-of-type { margin-top: 0 !important; }
+
+.prose h2 {
+  /* Distinct step below h1 */
+  @apply text-2xl md:text-3xl font-medium tracking-tight mt-6 mb-2;
+}
+
+.prose h3 {
+  /* Clear step below h2 */
+  @apply text-xl md:text-2xl font-medium tracking-tight mt-6 mb-2;
+}
+
+.prose h4 {
+  /* Subheading level */
+  @apply text-lg md:text-xl font-medium tracking-tight mt-6 mb-2;
+}
+
+.prose h5 {
+  /* Minor subheading */
+  @apply text-base md:text-lg font-medium tracking-tight mt-6 mb-2;
+}
+
+.prose strong {
+  @apply font-medium;
+}
+
+.prose ul {
+  @apply list-disc pl-6;
+}
+
+.prose ol {
+  @apply list-decimal pl-6;
+}
+
+.prose > :first-child {
+  /* Override removing top margin, causing layout shift */
+  margin-top: 1.25em !important;
+  margin-bottom: 1.25em !important;
+}
+
+pre::-webkit-scrollbar {
+  display: none;
+}
+
+pre {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Lighten code block background slightly and improve contrast */
+.hljs {
+  background: #f7f7f7; /* subtle light gray */
+  border: 1px solid #f1f3f5; /* lighter, softer edge */
+  border-radius: 8px;
+}
+
+.prose pre code {
+  font-size: 0.84rem;
+}
+
+/* Ensure all code blocks use the lighter background, regardless of theme defaults */
+.prose pre,
+.prose pre code,
+pre code.hljs,
+code.hljs {
+  background-color: #f7f7f7 !important; /* enforce subtle gray */
+}
+
+/* Optional: lighten inline code too for consistency */
+.prose :not(pre) > code {
+  background-color: #f7f7f7; /* match block background */
+  border: 1px solid #afafaf; /* requested inline code outline */
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+
+
+/* Table styling */
+.prose table {
+  @apply w-full border-collapse border border-gray-300 rounded-lg overflow-hidden;
+}
+
+.prose thead {
+  @apply bg-gray-100;
+}
+
+.prose tbody {
+  @apply divide-y divide-gray-200;
+}
+
+.prose th {
+  @apply px-4 py-2 text-left font-semibold text-gray-700 border-b border-gray-300;
+}
+
+.prose td {
+  @apply px-4 py-2 text-gray-700 border-b border-gray-200;
+}
+
+.prose tr:hover {
+  @apply bg-gray-50;
+}
+
+/* Blockquote styling */
+.prose blockquote {
+  @apply border-l-4 border-blue-500 pl-4 py-2 my-4 bg-blue-50 italic text-black dark:text-neutral-200;
+}
+
+/* Link styling */
+.prose a {
+  @apply text-blue-600 hover:text-blue-800 underline transition-colors;
+  /* Ensure underline follows text color (normal + hover) */
+  text-decoration-color: currentColor;
+}
+
+/* List styling */
+.prose ul {
+  @apply list-disc list-inside mb-4 space-y-1;
+}
+
+.prose ol {
+  @apply list-decimal list-inside mb-4 space-y-1;
+}
+
+.prose li {
+  @apply text-black;
+}
+
+/* Remove Safari input shadow on mobile */
+input[type='text'],
+input[type='email'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+table {
+  display: block;
+  max-width: fit-content;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.title {
+  text-wrap: balance;
+}
+
+/* Remove heading borders from prose */
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+/* Targets rehype-pretty-code blocks */
+pre[data-theme] {
+  border: 1px solid #afafaf;
+  border-radius: 6px;
+  margin: 1.5em 0;
+  overflow: auto;
+  padding: 1em;
+  background-color: #efefef;
+  font-size: 0.8rem;
+}
+
+.prose code {
+  border: 1px solid #afafaf;
+  border-radius: 6px;
+  background-color: #efefef;
+  font-size: 0.8rem;
+  padding: 0.2em 0.4em;
+  margin: 0;
+}
+
+.prose a[href^="http"] {
+  text-decoration: none;
+}
+
+/* Add arrow only to external links (href starts with http) */
+.prose a[href^="http"]:after {
+  content: "↗";
+  font-size: 0.85em;
+  margin-left: 0.15em;
+  vertical-align: super;
+  color: inherit;
+  text-decoration: none;
+} 
+
+/* Breadcrumb links: underline on hover only */
+.mdx-breadcrumb-link {
+  text-decoration: none;
+}
+.mdx-breadcrumb-link:hover {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+/* Full-bleed utility: lets special content span viewport width */
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/* Ensure embedded media fills the full-bleed container */
+.full-bleed > iframe {
+  display: block;
+  width: 100%;
+}
+.full-bleed > img,
+.full-bleed > video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Breakout: escape article width, but cap content width */
+.breakout {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+.breakout-inner {
+  max-width: 768px; /* Designed content width */
+  margin-left: auto;
+  margin-right: auto;
+}
+.breakout-inner > iframe {
+  display: block;
+  width: 100%;
+}
+.breakout-inner > img,
+.breakout-inner > video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Specific: MoMA Tableau embed tall height */
+.iframe-tall-moma {
+  height: 2527px !important; /* show full dashboard without inner scroll */
+  border: 0;
+}

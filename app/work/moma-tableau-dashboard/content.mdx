@@ -1,0 +1,111 @@
+---
+title: "MoMA Collection Dashboard"
+publishedAt: "2024-10-17"
+summary: "An interactive Tableau dashboard exploring the Museum of Modern Art's collection data."
+---
+
+An [interactive data visualization](https://public.tableau.com/views/MomaDataVisualization/Dashboard?:language=en-US&:display_count=n&:origin=viz_share_link) project exploring the Museum of Modern Art's extensive collection of modern and contemporary art.
+
+<div className="breakout">
+  <div className="breakout-inner">
+    <iframe
+      className="iframe-tall-moma"
+      src="https://public.tableau.com/views/MomaDataVisualization_ForWebsite/Dashboard2?:showVizHome=no&:embed=true&publish=yes"
+      width="100%"
+      height="2527"
+      frameBorder="0"
+      allowFullScreen
+    ></iframe>
+  </div>
+</div>
+
+## The MoMA Dataset
+Visiting museums is one of my favorite activities so I knew I wanted to work with the open data source provided by the Museum of Modern Art which you can find here: [github/MuseumofModernArt](https://github.com/MuseumofModernArt/collection)
+
+This source contains 140,000+ records. The data provided is broken up into two files:
+
+- `Artists.csv`
+- `Artworks.csv`
+
+Within these tables, there were a few essential columns:
+
+1. `AccessionNumber` - a unique ID provided to each artwork in the collection
+2. `ConstituentID` - a unique ID for each artist who contributed works in the collection
+3. `Title` - Title of the artwork
+4. `DisplayName` - the name of the Artist
+5. `DateAcquired` - Indicates the date the artwork was acquired by the Museum of Modern Art
+
+Other fields such as `Nationality`, `Gender`, `Height (cm)`, `Width (cm)`, and more were also utilized.
+
+The tables were able to be joined on `ConstituentID`, as each Artist has one and each artwork is connected to a `ConstituentID`.
+
+## Goals of the project
+
+- Visualize how acquisitions have changed over time. 
+- Visualize the collection as a whole, how large is the artwork and which artists is the artwork coming from?
+- Utilize the look and feel of [moma.org](https://moma.org/)
+
+## Calculated fields
+Using tableau's calculated field functionality, I was able to create fields to make my visualizations more clear. 
+
+Primary Department
+
+![PrimaryDeptIMG](/work/moma-tableau-dashboard/tY9kVPbFZFjivnzyDn3TYcZbrR0.png)
+
+For example, on the top 10 artists visualization, tableau will allow you to color a bar chart based on the department, but some artists have a few pieces belonging to other categories. For the purpose of this dashboard, users can now see at a glance the artist's primary department. 
+
+First, I needed to get the maximum number of records for an artists department. This calculated field finds the count of distinct records for each department and returns the largest (MAX) one.
+
+MAX records:
+```sql
+{FIXED [Constituent ID]: MAX({FIXED [Constituent ID], [Department] : COUNTD([Accession Number])})}
+```
+
+Then, to find the primary department, I need to find what department matches the number of records we got from the first calculation.
+
+Primary Department:
+```sql
+{FIXED [Constituent ID]: MAX(
+    IF {FIXED [Constituent ID], [Department]: COUNTD([Accession Number])} = [MAX records] THEN
+        [Department]
+    END
+)}
+```
+Above, the calculated field looks at each Artist (Constituent ID) and checks to see if the count for each department equals the MAX records value.
+
+#### Orientation
+![OrientationGif](/work/moma-tableau-dashboard/fyEPXurrP7ZtL1JxuFYXcBzA4mA.gif)
+
+The orientation calculated field was as simple as calculating the width-height ratio and determining if it is equal to, greater than or less than one. 
+
+Orientation:
+```sql
+IF SUM([Width (cm)]) / SUM([Height (cm)]) = 1 THEN "Square"
+ELSEIF SUM([Width (cm)]) / SUM([Height (cm)]) > 1 THEN "Landscape"
+ELSEIF SUM([Width (cm)]) / SUM([Height (cm)]) < 1 THEN "Portrait" END
+```
+
+#### Tooltip Hover
+I also utilized embedding workbooks. On each visualization, you can hover a point to see more information but for some, it was useful to embed a different workbook. Hover any point on the scale scatterplot and you can see the title, the artwork and the dimensions of the painting.
+
+![TooltipHoverGIF](/work/moma-tableau-dashboard/kc3o5s0nEl5ttGyi2hi2kf7iDI.gif)
+
+Tooltip for the Scale Scatterplot:
+```sql
+<ATTR(Display Name)>
+<Height (cm)> cm x <Width (cm)> cm
+<Sheet name="ThumbnailHover" maxwidth="300" maxheight="300" filter="<All Fields>">
+```
+
+#### Utilizing Trend Lines & Average Lines
+
+For the line chart representing the percentage of artworks acquired by Female artists, it was essential to use trend lines and averages. 
+
+![FemaleWorksLineChart](/work/moma-tableau-dashboard/W0FnC25iADcObb6bTDatJ6Crbg.png)
+
+Of course we can see the MoMA has been acquiring more female-created art over time but the trend line allows us to see the upward trend and it becomes very clear how low the average is throughout the museum's history and when the museum has been more consistent at surpassing that average mark of 11.54%. 
+
+### Conclusion 
+Even just by using a few data points, we can uncover trends and patterns about the museum and visualize them in an interesting way. From their acquisition rates by gender and viewing the collection by nationality to seeing what departments the MoMA is composed of.
+
+You can view the project in its original dimensions here: [MoMA Data Visualization in Tableau](https://public.tableau.com/views/MomaDataVisualization/Dashboard?:language=en-US&:display_count=n&:origin=viz_share_link)

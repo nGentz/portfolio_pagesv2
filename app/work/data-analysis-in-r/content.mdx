@@ -1,0 +1,154 @@
+---
+title: "Statistical Analysis in R"
+publishedAt: "2024-03-10"
+summary: "A comprehensive guide to statistical analysis and data visualization using R programming language."
+---
+
+A comprehensive project demonstrating advanced statistical analysis techniques using R programming language, covering everything from basic descriptive statistics to complex machine learning models.
+
+## Project Scope
+
+This project showcases the power of R for statistical analysis, data visualization, and predictive modeling. It serves as both a learning resource and a practical toolkit for data scientists and researchers.
+
+## Analysis Components
+
+```python
+from PIL import Image
+from torchvision import transforms
+import torch
+
+transform = transforms.Compose([
+    transforms.Resize((224,224)),
+    transforms.ToTensor(),  # converts to (C,H,W) and scales to [0,1]
+])
+
+images = []
+labels = []
+
+for idx, row in avo_ripe_spreadsheet.iterrows():
+    img_path = 'Hass Avocado Ripening Photographic Dataset/Avocado Ripening Dataset/' + row['File Name'] + '.jpg'
+    img = Image.open(img_path).convert('RGB')  # ensure 3 channels
+    img_tensor = transform(img)
+    images.append(img_tensor)
+    labels.append(row['Ripening Index Classification'])
+
+X = torch.stack(images)  # shape: (N, C, H, W)
+y = torch.tensor(labels)
+```
+
+### Descriptive Statistics
+- Central tendency measures (mean, median, mode)
+- Dispersion metrics (variance, standard deviation, range)
+- Distribution analysis and normality tests
+- Correlation analysis between variables
+
+### Inferential Statistics
+- Hypothesis testing (t-tests, ANOVA, chi-square)
+- Confidence intervals and margin of error
+- Power analysis for study design
+- Multiple comparison corrections
+
+### Regression Analysis
+- Linear regression models
+- Multiple regression with interaction terms
+- Logistic regression for binary outcomes
+- Model diagnostics and validation
+
+## Data Visualization
+
+### Base R Graphics
+- Histograms and density plots
+- Scatter plots with regression lines
+- Box plots and violin plots
+- Time series visualizations
+
+### ggplot2 Enhancements
+- Publication-quality graphics
+- Faceted plots for subgroup analysis
+- Custom themes and color schemes
+- Interactive elements with plotly
+
+## Advanced Techniques
+
+### Machine Learning
+- Random Forest classification
+- Support Vector Machines
+- Clustering analysis (K-means, hierarchical)
+- Principal Component Analysis
+
+### Time Series Analysis
+- Trend and seasonality decomposition
+- ARIMA modeling
+- Forecasting with confidence intervals
+- Anomaly detection
+
+## Code Structure
+
+The project is organized into modular R scripts:
+- `data_preparation.R`: Data cleaning and preprocessing
+- `descriptive_analysis.R`: Basic statistical summaries
+- `inferential_analysis.R`: Hypothesis testing
+- `regression_models.R`: Predictive modeling
+- `visualization.R`: Plot generation
+- `report_generation.R`: Automated report creation
+
+## Key Features
+
+### Reproducible Research
+- R Markdown integration
+- Version control with Git
+- Docker containerization
+- Automated testing
+
+### Performance Optimization
+- Parallel processing with parallel package
+- Memory-efficient data handling
+- Caching for expensive computations
+- Profiling and optimization
+
+## Applications
+
+This toolkit has been applied to various domains:
+- **Healthcare**: Patient outcome prediction
+- **Finance**: Risk assessment models
+- **Marketing**: Customer segmentation
+- **Education**: Student performance analysis
+
+## Documentation
+
+Comprehensive documentation includes:
+- Function reference with examples
+- Best practices and coding standards
+- Troubleshooting guide
+- Performance benchmarks
+
+[`Learn more about R on the official website`](https://www.r-project.org/)
+
+
+[Learn more about R on the official website](https://www.r-project.org/)
+
+<Chart />
+<ScatterMap />
+
+Test blockquote
+> test hello
+
+>[!test]
+
+*italic*
+
+**bold**
+
+# h1
+## h2
+### h3
+#### h4
+##### h5
+
+## Future Development
+
+Planned enhancements:
+- Integration with Python via reticulate
+- Real-time data streaming capabilities
+- Advanced visualization libraries
+- Cloud deployment options 
