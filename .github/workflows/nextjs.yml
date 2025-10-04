@@ -1,4 +1,3 @@
-# Build and deploy a Next.js static export to GitHub Pages using pnpm
 name: Deploy Next.js site to Pages
 
 on:
@@ -19,50 +18,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: 20
           cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml   # change if your app is in a subfolder
+          cache-dependency-path: pnpm-lock.yaml
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: next
+      # Set BASE_PATH to "/<repo>" for project pages.
+      - name: Set BASE_PATH
+        run: echo "BASE_PATH=/${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
 
       - name: Restore Next.js cache
         uses: actions/cache@v4
         with:
           path: .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx', '**/*.mjs', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
-      - name: Install dependencies
+      - name: Install
         run: pnpm install
-        # working-directory: .                    # set to e.g. app/ if needed
 
       - name: Build
         run: pnpm next build
-        # working-directory: .
 
-      - name: Export static site
+      - name: Export
         run: pnpm next export
-        # working-directory: .
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out                                # change to app/out if using a subfolder
+          path: ./out
 
   deploy:
     needs: build
